@@ -4,9 +4,11 @@ import { VscThreeBars } from 'react-icons/vsc'
 import { range, orderBy } from 'lodash'
 
 import playlistData from '../data'
+import SongPane from './SongPane'
 
 export default function Playlist() {
   const [playlist, setPlaylist] = useState(playlistData)
+  const [detailsPane, setDetailsPane] = useState({ visible: false, data: [] })
 
   const listRenderer = orderBy(playlist, 'position').map((item) => (
     <Draggable
@@ -23,14 +25,17 @@ export default function Playlist() {
           <a {...provided.dragHandleProps} className='handle'>
             <VscThreeBars />
           </a>
-          <div>
+          <a onClick={() => setDetailsPane({ visible: true, data: item })}>
             <img src={item.thumb} width='100%' alt={item.title} />
-          </div>
-          <div>
+          </a>
+          <a
+            onClick={() => setDetailsPane({ visible: true, data: item })}
+            className='list-container__item-title'
+          >
             {item.position} - {item.title}
-          </div>
-          <div>{item.artist}</div>
-          <div>{item.released}</div>
+          </a>
+          <div className='metadata'>{item.artist}</div>
+          <div className='metadata'>{item.released}</div>
         </div>
       )}
     </Draggable>
@@ -89,6 +94,11 @@ export default function Playlist() {
       <div>
         <h1>Drag&Drop</h1>
       </div>
+      <SongPane
+        visible={detailsPane.visible}
+        data={detailsPane.data}
+        closePane={() => setDetailsPane({ visible: false })}
+      />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={'PLAYLIST'}>
           {(provided) => (
