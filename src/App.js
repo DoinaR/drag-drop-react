@@ -1,12 +1,12 @@
 import Playlist from './components/Playlist'
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   return (
-    <div className='container'>
-      <div className='content'>
-        <Playlist />
-      </div>
-    </div>
+    <Routes>
+      <Route path='/' element={<Playlist />} />
+      <Route path=':viewParam?' exact element={<Playlist />} />
+    </Routes>
   )
 }
 
